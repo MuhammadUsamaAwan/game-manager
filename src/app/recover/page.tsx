@@ -1,6 +1,6 @@
 'use client';
 import useTableFilter from '@/hooks/useTableFilter';
-import { Button, ConfigProvider, Table, Tag, Typography, theme } from 'antd';
+import { Button, ConfigProvider, Table, Tag, theme } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import useSWR from 'swr';
 
@@ -77,15 +77,16 @@ export default function Recover() {
         algorithm: theme.darkAlgorithm,
       }}
     >
-      <Typography.Title level={3} style={{ textAlign: 'center' }}>
-        Game Manager
-      </Typography.Title>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+        <h1 style={{ textAlign: 'center', flex: 1, margin: 0, fontSize: '24px' }}>Game Manager</h1>
+      </div>
       <Table
         columns={columns}
         dataSource={data}
         loading={isLoading}
         pagination={{ showTotal: total => `Total ${total} Games` }}
         scroll={{ x: 'max-content' }}
+        rowKey='name'
       />
     </ConfigProvider>
   );

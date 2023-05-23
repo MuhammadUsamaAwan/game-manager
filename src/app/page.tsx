@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import useTableFilter from '@/hooks/useTableFilter';
-import { Button, ConfigProvider, Dropdown, Popconfirm, Table, Tag, Typography, theme } from 'antd';
+import { Button, ConfigProvider, Dropdown, Form, Input, InputNumber, Modal, Popconfirm, Table, Tag, theme } from 'antd';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import useSWR from 'swr';
@@ -18,6 +18,8 @@ interface Game {
 export default function Home() {
   const { data, isLoading, mutate } = useSWR<Game[]>('/api/games', fetcher);
   const [name, setName] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const filter = useTableFilter();
 
   const changeStatus = async (status: string) => {
@@ -128,16 +130,57 @@ export default function Home() {
         algorithm: theme.darkAlgorithm,
       }}
     >
-      <Typography.Title level={3} style={{ textAlign: 'center' }}>
-        Game Manager
-      </Typography.Title>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+        <h1 style={{ textAlign: 'center', flex: 1, margin: 0, fontSize: '24px' }}>Game Manager</h1>
+        <Button onClick={() => setIsModalOpen(true)}>Scrap New Data</Button>
+      </div>
       <Table
         columns={columns}
         dataSource={data}
         loading={isLoading}
         pagination={{ showTotal: total => `Total ${total} Games` }}
         scroll={{ x: 'max-content' }}
+        rowKey='name'
       />
+      <Modal
+        title='Scrap New Data'
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={[
+          <Button key='cancel' onClick={() => setIsModalOpen(false)}>
+            Cancel
+          </Button>,
+          <Button form='scrapNewDataForm' key='submit' type='primary' htmlType='submit' loading={loading}>
+            Submit
+          </Button>,
+        ]}
+        destroyOnClose
+      >
+        <Form
+          id='scrapNewDataForm'
+          onFinish={async (values: { page: number }) => {
+            setLoading(true);
+            await fetch(`/api/games/scrap`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ page: values.page }),
+            });
+            setLoading(false);
+            setIsModalOpen(false);
+            mutate();
+          }}
+        >
+          <Form.Item
+            label='Number of Pages'
+            name='page'
+            rules={[{ required: true, message: 'Please enter number of pages!' }]}
+          >
+            <InputNumber placeholder='Enter Number of Pages' style={{ width: '100%' }} />
+          </Form.Item>
+        </Form>
+      </Modal>
     </ConfigProvider>
   );
 }
