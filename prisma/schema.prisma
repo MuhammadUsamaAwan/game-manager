@@ -1,0 +1,16 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  name      String  @id @unique
+  year      Int
+  score     Int
+  isDeleted Boolean @default(false)
+  status    String  @default("PENDING")
+}
