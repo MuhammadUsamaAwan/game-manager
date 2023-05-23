@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import useTableFilter from '@/hooks/useTableFilter';
-import { Button, ConfigProvider, Dropdown, Popconfirm, Table, Typography, theme } from 'antd';
+import { Button, ConfigProvider, Dropdown, Popconfirm, Table, Tag, Typography, theme } from 'antd';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import useSWR from 'swr';
@@ -61,6 +61,12 @@ export default function Home() {
     },
   ];
 
+  const getColor = (status: string) => {
+    if (status === 'COMPLETED' || status === 'COMPLETED SEQUEL') return 'success';
+    else if (status === 'NOT FOR ME') return 'warning';
+    else return 'default';
+  };
+
   const columns: ColumnsType<Game> = [
     {
       title: 'Name',
@@ -87,8 +93,8 @@ export default function Home() {
     },
     {
       title: 'Status',
-      dataIndex: 'status',
       ...filter('status'),
+      render: (_, { status }) => <Tag color={getColor(status)}>{status}</Tag>,
       align: 'center',
       sorter: (a, b) => a.status.localeCompare(b.status),
       width: '20%',
