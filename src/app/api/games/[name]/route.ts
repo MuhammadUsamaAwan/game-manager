@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/db';
 import { z } from 'zod';
 
-export async function PUT(
+export async function PATCH(
   request: Request,
   {
     params,

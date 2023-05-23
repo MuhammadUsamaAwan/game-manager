@@ -22,7 +22,7 @@ export default function Home() {
 
   const changeStatus = async (status: string) => {
     await fetch(`/api/games/${name}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
