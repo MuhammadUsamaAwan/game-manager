@@ -1,5 +1,6 @@
 **Description**
-Scrap games from metacritics for PC. Add to your own db and manage games statuses, delete and recover them also scrap for new games as well.
+
+Scrap games from metacritic for PC. Add it to your own db and manage games statuses, delete and recover them also scrap for new games as well.
 
 **To Run**
 
