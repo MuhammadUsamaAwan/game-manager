@@ -17,7 +17,7 @@ export async function PUT(
 
   try {
     const { status } = bodySchema.parse(res);
-    const game = await prisma.game.update({
+    await prisma.game.update({
       where: {
         name: params.name,
       },
@@ -44,10 +44,8 @@ export async function DELETE(
     params: { name: string };
   }
 ) {
-  const res = await request.json();
-
   try {
-    const game = await prisma.game.update({
+    await prisma.game.update({
       where: {
         name: params.name,
       },
