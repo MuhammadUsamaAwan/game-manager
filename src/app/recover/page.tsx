@@ -80,7 +80,13 @@ export default function Recover() {
       <Typography.Title level={3} style={{ textAlign: 'center' }}>
         Game Manager
       </Typography.Title>
-      <Table columns={columns} dataSource={data} loading={isLoading} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        loading={isLoading}
+        pagination={{ showTotal: total => `Total ${total} Games` }}
+        scroll={{ x: 'max-content' }}
+      />
     </ConfigProvider>
   );
 }
